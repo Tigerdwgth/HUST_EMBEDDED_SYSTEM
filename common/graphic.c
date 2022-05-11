@@ -163,14 +163,9 @@ void fb_draw_rect(int x, int y, int w, int h, int color)
 	if(w<=0 || h<=0) return;
 /*---------------------------------------------------*/
 	int i,j;
-
 	for(i = 0; i < w; ++i)
-	{
 		for( j = 0; j < h ; ++j)
-		{
 			fb_draw_pixel(x+i, y + j, color);
-		}
-	}
 
 /*---------------------------------------------------*/
 	return;
@@ -205,11 +200,10 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 		if (!(x1<x2&&y1<y2))step=-step; 
 		for(;l<r;++l)
 		{
-			fb_draw_pixel(l,y1,color);
-			y1+=step;
+			for(;y1<y1+step;++y1)
+				fb_draw_pixel(l,y1,color);
 		}
 	}
-
 /*---------------------------------------------------*/
 	return;
 }
