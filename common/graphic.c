@@ -218,13 +218,13 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 		}
 		else
 		{
-			double yy1=y1;
-			if (!(x1<x2&&y1<y2))step=-step; 
-			for(;l<r;++l)
-			{
-				fb_draw_pixel(l,(int)yy1,color);
-				yy1+=step;
-			}
+			// double yy1=y1;
+			// if (!(x1<x2&&y1<y2))step=-step; 
+			// for(;l<r;++l)
+			// {
+			// 	fb_draw_pixel(l,(int)yy1,color);
+			// 	yy1+=step;
+			// }
 		}
 	}
 /*---------------------------------------------------*/
