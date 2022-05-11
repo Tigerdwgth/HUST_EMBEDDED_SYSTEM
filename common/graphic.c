@@ -207,7 +207,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 		// 	fb_draw_pixel(l,(int)yy1,color);
 		// 	yy1+=step;
 		// }		
-		if(step>3)
+		if(step>4)
 		{
 			if (!(x1<x2&&y1<y2))step=-step; 
 			for(;l<r;++l)
