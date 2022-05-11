@@ -174,14 +174,6 @@ void fb_draw_rect(int x, int y, int w, int h, int color)
 void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 {
 /*---------------------------------------------------*/
-	if(x1 < 0) {x1 = 0;}
-	if(y1 < 0) {y1 = 0;}
-	if(x2 < 0) {x2 = 0;}
-	if(y2 < 0) {y2 = 0;}
-	if(x1 > SCREEN_WIDTH) {x1 = SCREEN_WIDTH;}
-	if(y1 >SCREEN_HEIGHT) {y1 = SCREEN_HEIGHT;}
-	if(x2 > SCREEN_WIDTH) {x2 = SCREEN_WIDTH;}
-	if(y2 >SCREEN_HEIGHT) {y2 = SCREEN_HEIGHT;}
 	int l,r,u,d;
 	if(x1>x2){l=x2;r=x1;}else {l=x1;r=x2;}
 	if(y1>y2){u=y1;d=y2;}else{u=y2;d=y1;}
