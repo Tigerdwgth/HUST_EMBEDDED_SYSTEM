@@ -184,7 +184,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 		y1=y2;
 		y2=l;
 	}
-	
+
 	if(x1>x2){l=x2;r=x1;}else {l=x1;r=x2;}
 	if(y1>y2){u=y1;d=y2;}else{u=y2;d=y1;}
 	if(x1==x2)
@@ -198,20 +198,33 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	}
 	else
 	{
-		int step=(abs(y1-y2)/abs(x1-x2))<1?1:(int)(abs(y1-y2)/abs(x1-x2));
-		if (!(x1<x2&&y1<y2))step=-step; 
-		for(;l<r;++l)
+		double step=((double)abs(y1-y2)/abs(x1-x2));
+		if(step>=1)
 		{
-			int tmp=step;
-			if(step<0)
+			if (!(x1<x2&&y1<y2))step=-step; 
+			for(;l<r;++l)
 			{
-			while(tmp++<0)fb_draw_pixel(l,y1--,color);
-			}
-			else
-			{
-				while(tmp-->0)fb_draw_pixel(l,y1++,color);
-			}
+				int tmp=step;
+				if(step<0)
+				{
+				while(tmp++<0)fb_draw_pixel(l,y1--,color);
+				}
+				else
+				{
+					while(tmp-->0)fb_draw_pixel(l,y1++,color);
+				}
 
+			}
+		}
+		else
+		{
+			double yy1=y1;
+			if (!(x1<x2&&y1<y2))step=-step; 
+			for(;l<r;++l)
+			{
+				fb_draw_pixel(l,(int)yy1,color);
+				yy1+=step;
+			}
 		}
 	}
 /*---------------------------------------------------*/

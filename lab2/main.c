@@ -58,13 +58,13 @@ int main(int argc, char* argv[])
 	start = task_get_time();
 	for(row=0;row<=400;row+=20){
 		fb_draw_line(500-300,300-200+row,500+300,300+200-row,color[1]);
-		fb_draw_line(200,100+row,800,500-row,color[1]);
+		// fb_draw_line(200,100+row,800,500-row,color[1]);
 		//orange
 		
 	}
 	for(column=0;column<=400;column+=20){
 		fb_draw_line(500-200+column,300-200,500+200-column,300+200,color[2]);
-		fb_draw_line(300+column,100,700-column,500,color[2]);
+		// fb_draw_line(300+column,100,700-column,500,color[2]);
 		//yellow fangshexian
 	}
 	end = task_get_time();
