@@ -188,7 +188,8 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	}
 	else
 	{
-		int step=(abs(y1-y2)/abs(x1-x2))<1?1:(int)(abs(y1-y2)/abs(x1-x2));
+		int step=(abs(y1-y2)/abs(x1-x2))+1;
+		// <1?1:(int)(abs(y1-y2)/abs(x1-x2));
 		if (!(x1<x2&&y1<y2))step=-step; 
 		for(;l<r;++l)
 		{
