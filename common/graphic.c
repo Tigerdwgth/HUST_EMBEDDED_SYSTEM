@@ -200,41 +200,41 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	{
 
 		double step=((double)abs(y1-y2)/abs(x1-x2));
-		double yy1=y1;
-		if (!(x1<x2&&y1<y2))step=-step; 
-		for(;l<r;++l)
-		{
-			fb_draw_pixel(l,(int)yy1,color);
-			yy1+=step;
-		}		
-		// if(step>1)
+		// double yy1=y1;
+		// if (!(x1<x2&&y1<y2))step=-step; 
+		// for(;l<r;++l)
 		// {
-		// 	int tmp=step;
-		// 	if (!(x1<x2&&y1<y2))step=-step; 
-		// 	for(;l<r;++l)
-		// 	{	
-		// 		if(step<0)
-		// 		{
-		// 		while(tmp++<0)fb_draw_pixel(l,y1--,color);
-		// 		}
-		// 		else
-		// 		{
-		// 			while(tmp-->0)fb_draw_pixel(l,y1++,color);
-		// 		}
-		// 	}
+		// 	fb_draw_pixel(l,(int)yy1,color);
+		// 	yy1+=step;
+		// }		
+		if(step>2)
+		{
+			int tmp=step;
+			if (!(x1<x2&&y1<y2))step=-step; 
+			for(;l<r;++l)
+			{	
+				if(step<0)
+				{
+				while(tmp++<0)fb_draw_pixel(l,y1--,color);
+				}
+				else
+				{
+					while(tmp-->0)fb_draw_pixel(l,y1++,color);
+				}
+			}
 		// 	printf("step: %.6f \n",step);
 		// 	sleep(1);
-		// }
-		// else
-		// {
-		// 	double yy1=y1;
-		// 	if (!(x1<x2&&y1<y2))step=-step; 
-		// 	for(;l<r;++l)
-		// 	{
-		// 		fb_draw_pixel(l,(int)yy1,color);
-		// 		yy1+=step;
-		// 	}
-		// }
+		}
+		else
+		{
+			double yy1=y1;
+			if (!(x1<x2&&y1<y2))step=-step; 
+			for(;l<r;++l)
+			{
+				fb_draw_pixel(l,(int)yy1,color);
+				yy1+=step;
+			}
+		}
 	}
 /*---------------------------------------------------*/
 	return;
