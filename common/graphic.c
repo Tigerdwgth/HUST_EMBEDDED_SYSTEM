@@ -215,9 +215,9 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				{
 					while(tmp-->=0)fb_draw_pixel(l,yy1++,color);
 				}
+				tmp=step;
 				if(tmp>0)tmp++;
 				if(tmp<0)tmp--;
-				tmp=step;
 				yy1-=tmp;
 				yy1+=step;
 			}
@@ -289,14 +289,15 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	int c;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
-		for(i = 0; i < w; ++i)
-		{
-			for( j = 0; j < h ; ++j)
-			{				
-				c=*((int*)(image->content+(w*j+i)*4));
-				*(buf + (y + j)*SCREEN_WIDTH + x+i)=c;
-			}
-		}
+		memcpy(buf,image->content,w*h*4);
+		// for(i = 0; i < w; ++i)
+		// {
+		// 	for( j = 0; j < h ; ++j)
+		// 	{				
+		// 		c=*((int*)(image->content+(w*j+i)*4));
+		// 		*(buf + (y + j)*SCREEN_WIDTH + x+i)=c;
+		// 	}
+		// }
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
