@@ -292,7 +292,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			for( j = 0; j < h ; ++j)
 			{				
 				c=*((int*)(image->content+(w*j+i)*4));
-				fb_draw_pixel(x+i, y + j, c);
+				*(buf + (y + j)*SCREEN_WIDTH + x+i)=c;
 			}
 		}
 		return;
@@ -304,7 +304,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			for( j = 0; j < h ; ++j)
 			{
 				c=*((int*)(image->content+(w*j+i)*4));
-				fb_draw_pixel(x+i, y + j, calculate_color(c,get_color(buf,x+i,y+j)));
+				*(buf + (y + j)*SCREEN_WIDTH + x+i)=calculate_color(c,get_color(buf,x+i,y+j));
 			}
 		}
 
@@ -318,7 +318,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			{
 				c=*((int*)(image->content+w*j+i));
 				c=(c<<24)&&color;
-				fb_draw_pixel(x+i, y + j, calculate_color(c,get_color(buf,x+i,y+j)));
+				*(buf + (y + j)*SCREEN_WIDTH + x+i)=calculate_color(c,get_color(buf,x+i,y+j));
 			}
 		}
 
