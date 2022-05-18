@@ -164,8 +164,11 @@ void fb_draw_rect(int x, int y, int w, int h, int color)
 	int *buf = _begin_draw(x,y,w,h);
 /*---------------------------------------------------*/
 	int i,j;
+	int *tmpline=(int*)malloc(w*sizeof(int));
+	for(i=0;i<w;i++)
+		tmpline[i]=color;
 	for( j = 0; j < h ; ++j)
-		memset(buf+x+(y+j)*SCREEN_WIDTH,color,w*sizeof(int));
+		memcpy(buf+x+(y+j)*SCREEN_WIDTH,tmpline,w*sizeof(int));
 		// for(i = 0; i < w; ++i)
 		// 	*(buf + (y + j)*SCREEN_WIDTH + x+i) = color;
 
