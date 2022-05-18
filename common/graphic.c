@@ -243,19 +243,19 @@ int get_color(int* buf,int x,int y)
 }
 int cal_alpha(double a1,int c1,int c2)
 {
-	return c1*a1+c2*(1-a1);
+	return (double)c1*a1+(double)c2*(1-a1);
 	//calculate color with alpha
 }
 int calculate_color(int new,int old)
 {
 	int oldr=((old>>16)&0xff),oldg=((old>>8)&0xff),oldb=((old)&0xff);
-	int newalpha=((new>>24)&0xff),newr=((new>>24)&0xff),newg=((new>>24)&0xff),newb=((new>>24)&0xff);
-	double a1=newalpha/255.0;
+	int newalpha=((new>>24)&0xff),newr=((new>>16)&0xff),newg=((new>>8)&0xff),newb=((new)&0xff);
+	double a1=(double)newalpha/255.0;
 	int r=cal_alpha(a1,newr,oldr);
 	int g=cal_alpha(a1,newg,oldg);
 	int b=cal_alpha(a1,newb,oldb);
 	//cal color for rgb seperately
-	return (0xff000000|(r<<16)|(g<<8)|b);
+	return (0xff000000|((0xff&r)<<16)|((0xff&g)<<8)|(0xff&b));
 }
 void fb_draw_image(int x, int y, fb_image *image, int color)
 {
