@@ -215,6 +215,8 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				{
 					while(tmp-->=0)fb_draw_pixel(l,yy1++,color);
 				}
+				if(tmp>0)tmp++;
+				if(tmp<0)tmp--;
 				tmp=step;
 				yy1-=tmp;
 				yy1+=step;
