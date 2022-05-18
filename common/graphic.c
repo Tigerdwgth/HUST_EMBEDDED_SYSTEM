@@ -163,8 +163,8 @@ void fb_draw_rect(int x, int y, int w, int h, int color)
 	if(w<=0 || h<=0) return;
 /*---------------------------------------------------*/
 	int i,j;
-	for(i = 0; i < w; ++i)
-		for( j = 0; j < h ; ++j)
+	for( j = 0; j < h ; ++j)
+		for(i = 0; i < w; ++i)
 			fb_draw_pixel(x+i, y + j, color);
 
 /*---------------------------------------------------*/
@@ -209,11 +209,11 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				int tmp=step;
 				if(step<0)
 				{
-				while(tmp++<0)fb_draw_pixel(l,yy1--,color);
+				while(tmp++<=0)fb_draw_pixel(l,yy1--,color);
 				}
 				else
 				{
-					while(tmp-->0)fb_draw_pixel(l,yy1++,color);
+					while(tmp-->=0)fb_draw_pixel(l,yy1++,color);
 				}
 				tmp=step;
 				yy1-=tmp;
