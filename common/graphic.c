@@ -264,26 +264,42 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	int alpha;
 	int ww;
 	int i,j;
+	int c;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
 		for(i = 0; i < w; ++i)
+		{
 			for( j = 0; j < h ; ++j)
-				fb_draw_pixel(x+i, y + j, *((int*)(image->content+(w*i+j)*4)));
+			{				
+				c=*((int*)(image->content+(w*j+i)*4));
+				fb_draw_pixel(x+i, y + j, c*(c>>24));
+			}
+		}
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
 		for(i = 0; i < w; ++i)
+		{
 			for( j = 0; j < h ; ++j)
-				fb_draw_pixel(x+i, y + j, *((int*)(image->content+(w*i+j)*4)));
+			{
+				c=*((int*)(image->content+(w*j+i)*4));
+				fb_draw_pixel(x+i, y + j, c*(c>>24));
+			}
+		}
 
 		return;
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
 	{
 		for(i = 0; i < w; ++i)
+		{
 			for( j = 0; j < h ; ++j)
-				fb_draw_pixel(x+i, y + j, *((int*)(image->content+(w*i+j)*4)));
+			{
+				c=*((int*)(image->content+w*j+i));
+				fb_draw_pixel(x+i, y + j, color*c);
+			}
+		}
 
 		return;
 	}
