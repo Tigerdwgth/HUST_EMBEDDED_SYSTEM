@@ -293,7 +293,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 		
 		for( j = 0; j <h ; ++j)
 		{				
-			memcpy(buf+SCREEN_WIDTH*j,image->content+j*w*4,w*4);
+			memcpy(buf+SCREEN_WIDTH*j+x,image->content+j*w*4,w*4);
 		}
 
 		// for(i = 0; i < w; ++i)
