@@ -284,7 +284,8 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			for( j = 0; j < h ; ++j)
 			{
 				c=*((int*)(image->content+(w*j+i)*4));
-				fb_draw_pixel(x+i, y + j, c*(0xff&(c>>24)));
+				// fb_draw_pixel(x+i, y + j, c*(0xff&(c>>24)));
+				fb_draw_pixel(x+i, y + j, c);
 			}
 		}
 
