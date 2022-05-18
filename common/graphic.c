@@ -161,11 +161,12 @@ void fb_draw_rect(int x, int y, int w, int h, int color)
 	if(y < 0) { h += y; y = 0;}
 	if(y+h >SCREEN_HEIGHT) { h = SCREEN_HEIGHT-y;}
 	if(w<=0 || h<=0) return;
+	int *buf = _begin_draw(x,y,w,h);
 /*---------------------------------------------------*/
 	int i,j;
 	for( j = 0; j < h ; ++j)
 		for(i = 0; i < w; ++i)
-			fb_draw_pixel(x+i, y + j, color);
+			*(buf + (y + j)*SCREEN_WIDTH + x+i) = color;
 
 /*---------------------------------------------------*/
 	return;
@@ -200,7 +201,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	{
 
 		double step=((double)abs(y1-y2)/abs(x1-x2));	
-		if(step>2)
+		if(step>1.3)
 		{
 			double yy1=y1;
 			if (!(x1<x2&&y1<y2))step=-step; 
@@ -289,7 +290,12 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	int c;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
-		memcpy(buf,image->content,w*h*4);
+		
+		for( j = 0; j <h ; ++j)
+		{				
+			memcpy(buf,image->content+j*w,w*4);
+		}
+
 		// for(i = 0; i < w; ++i)
 		// {
 		// 	for( j = 0; j < h ; ++j)
