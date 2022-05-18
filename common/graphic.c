@@ -201,7 +201,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	{
 
 		double step=((double)abs(y1-y2)/abs(x1-x2));	
-		if(step>1.3)
+		if(step>1.1)
 		{
 			double yy1=y1;
 			if (!(x1<x2&&y1<y2))step=-step; 
@@ -293,7 +293,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 		
 		for( j = 0; j <h ; ++j)
 		{				
-			memcpy(buf,image->content+j*w,w*4);
+			memcpy(buf+SCREEN_WIDTH*j,image->content+j*w*4,w*4);
 		}
 
 		// for(i = 0; i < w; ++i)
