@@ -200,7 +200,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	{
 
 		double step=((double)abs(y1-y2)/abs(x1-x2));	
-		if(step>4)
+		if(step>2)
 		{
 			double yy1=y1;
 			if (!(x1<x2&&y1<y2))step=-step; 
@@ -219,8 +219,6 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				yy1-=tmp;
 				yy1+=step;
 			}
-		// 	printf("step: %.6f \n",step);
-		// 	sleep(1);
 		}
 		else
 		{
@@ -265,22 +263,27 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 
 	int alpha;
 	int ww;
-
+	int i,j;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
-		printf("you need implement fb_draw_image() FB_COLOR_RGB_8880\n"); exit(0);
-
+		for(i = 0; i < w; ++i)
+			for( j = 0; j < h ; ++j)
+				fb_draw_pixel(x+i, y + j, *((int*)(image->content+(w*i+j)*4)));
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
-		printf("you need implement fb_draw_image() FB_COLOR_RGBA_8888\n"); exit(0);
+		for(i = 0; i < w; ++i)
+			for( j = 0; j < h ; ++j)
+				fb_draw_pixel(x+i, y + j, *((int*)(image->content+(w*i+j)*4)));
 
 		return;
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
 	{
-		printf("you need implement fb_draw_image() FB_COLOR_ALPHA_8\n"); exit(0);
+		for(i = 0; i < w; ++i)
+			for( j = 0; j < h ; ++j)
+				fb_draw_pixel(x+i, y + j, *((int*)(image->content+(w*i+j)*4)));
 
 		return;
 	}
