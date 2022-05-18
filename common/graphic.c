@@ -165,7 +165,7 @@ void fb_draw_rect(int x, int y, int w, int h, int color)
 /*---------------------------------------------------*/
 	int i,j;
 	for( j = 0; j < h ; ++j)
-		memset(buf+x+(y+j)*SCREEN_WIDTH,color,w);
+		memset(buf+x+(y+j)*SCREEN_WIDTH,color,w*4);
 		// for(i = 0; i < w; ++i)
 		// 	*(buf + (y + j)*SCREEN_WIDTH + x+i) = color;
 
