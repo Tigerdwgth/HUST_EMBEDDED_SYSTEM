@@ -199,14 +199,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	else
 	{
 
-		double step=((double)abs(y1-y2)/abs(x1-x2));
-		// double yy1=y1;
-		// if (!(x1<x2&&y1<y2))step=-step; 
-		// for(;l<r;++l)
-		// {
-		// 	fb_draw_pixel(l,(int)yy1,color);
-		// 	yy1+=step;
-		// }		
+		double step=((double)abs(y1-y2)/abs(x1-x2));	
 		if(step>4)
 		{
 			double yy1=y1;
@@ -216,12 +209,15 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				int tmp=step;
 				if(step<0)
 				{
-				while(tmp++<0)fb_draw_pixel(l,y1--,color);
+				while(tmp++<0)fb_draw_pixel(l,yy1--,color);
 				}
 				else
 				{
-					while(tmp-->0)fb_draw_pixel(l,y1++,color);
+					while(tmp-->0)fb_draw_pixel(l,yy1++,color);
 				}
+				tmp=step;
+				yy1-=tmp;
+				yy1+=step;
 			}
 		// 	printf("step: %.6f \n",step);
 		// 	sleep(1);
