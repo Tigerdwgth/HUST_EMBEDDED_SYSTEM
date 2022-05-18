@@ -200,7 +200,7 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	{
 
 		double step=((double)abs(y1-y2)/abs(x1-x2));	
-		if(step>4)
+		if(step>2)
 		{
 			double yy1=y1;
 			if (!(x1<x2&&y1<y2))step=-step; 
@@ -219,8 +219,6 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				yy1-=tmp;
 				yy1+=step;
 			}
-		// 	printf("step: %.6f \n",step);
-		// 	sleep(1);
 		}
 		else
 		{
@@ -237,6 +235,28 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 	return;
 }
 
+//add by tiger_g3
+int get_color(int* buf,int x,int y)
+{
+	return *(buf + y*SCREEN_WIDTH + x);
+	//get color from buf
+}
+int cal_alpha(double a1,int c1,int c2)
+{
+	return c1*a1+c2*(1-a1);
+	//calculate color with alpha
+}
+int calculate_color(int new,int old)
+{
+	int oldr=((old>>16)&0xff),oldg=((old>>8)&0xff),oldb=((old)&0xff);
+	int newalpha=((new>>24)&0xff),newr=((new>>24)&0xff),newg=((new>>24)&0xff),newb=((new>>24)&0xff);
+	double a1=newalpha/255.0;
+	int r=cal_alpha(a1,newr,oldr);
+	int g=cal_alpha(a1,newg,oldg);
+	int b=cal_alpha(a1,newb,oldb);
+	//cal color for rgb seperately
+	return (0xff000000|(r<<16)|(g<<8)|b);
+}
 void fb_draw_image(int x, int y, fb_image *image, int color)
 {
 	if(image == NULL) return;
@@ -263,24 +283,44 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	char *src; //不同的图像颜色格式定位不同
 /*---------------------------------------------------------------*/
 
-	int alpha;
-	int ww;
-
+	int i,j;
+	int c;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
-		printf("you need implement fb_draw_image() FB_COLOR_RGB_8880\n"); exit(0);
-
+		for(i = 0; i < w; ++i)
+		{
+			for( j = 0; j < h ; ++j)
+			{				
+				c=*((int*)(image->content+(w*j+i)*4));
+				fb_draw_pixel(x+i, y + j, c);
+			}
+		}
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
-		printf("you need implement fb_draw_image() FB_COLOR_RGBA_8888\n"); exit(0);
+		for(i = 0; i < w; ++i)
+		{
+			for( j = 0; j < h ; ++j)
+			{
+				c=*((int*)(image->content+(w*j+i)*4));
+				fb_draw_pixel(x+i, y + j, calculate_color(c,get_color(buf,x+i,y+j)));
+			}
+		}
 
 		return;
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
 	{
-		printf("you need implement fb_draw_image() FB_COLOR_ALPHA_8\n"); exit(0);
+		for(i = 0; i < w; ++i)
+		{
+			for( j = 0; j < h ; ++j)
+			{
+				c=*((int*)(image->content+w*j+i));
+				c=(c<<24)&&color;
+				fb_draw_pixel(x+i, y + j, calculate_color(c,get_color(buf,x+i,y+j)));
+			}
+		}
 
 		return;
 	}
