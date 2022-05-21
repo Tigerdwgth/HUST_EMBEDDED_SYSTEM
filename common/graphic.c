@@ -294,20 +294,18 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	int c;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
-		
-		// for( j = 0; j <h ; ++j)
-		// {				
-		// 	memcpy(buf+SCREEN_WIDTH*j+x,image->content+j*w*4,w*4);
-		// }
-
-		for(i = 0; i < w; ++i)
-		{
-			for( j = 0; j < h ; ++j)
-			{				
-				c=*((int*)(image->content+(w*j+i)*4));
-				*(buf + (y + j)*SCREEN_WIDTH + x+i)=c;
-			}
+		for( j = 0; j <h ; ++j)
+		{				
+			memcpy(*dst+SCREEN_WIDTH*j,image->content+j*w*4,w*4);
 		}
+		// for(i = 0; i < w; ++i)
+		// {
+		// 	for( j = 0; j < h ; ++j)
+		// 	{				
+		// 		c=*((int*)(image->content+(w*j+i)*4));
+		// 		*(buf + (y + j)*SCREEN_WIDTH + x+i)=c;
+		// 	}
+		// }
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
