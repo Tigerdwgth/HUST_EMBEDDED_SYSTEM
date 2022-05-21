@@ -286,8 +286,8 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 
 	int *buf = _begin_draw(x,y,w,h);
 /*---------------------------------------------------------------*/
-	char *dst = (char *)(buf + y*SCREEN_WIDTH + x);
-	char *src; //不同的图像颜色格式定位不同
+	int *dst = (buf + y*SCREEN_WIDTH + x);
+	// char *src; //不同的图像颜色格式定位不同
 /*---------------------------------------------------------------*/
 
 	int i,j;
@@ -296,8 +296,9 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	{
 		for( j = 0; j<h ; ++j)
 		{				
-			memcpy(dst+SCREEN_WIDTH*j,image->content+j*w*4,w*4);
+			memcpy(dst+SCREEN_WIDTH*j,image->content+j*w*sizeof(int),w*sizeof(int));
 		}
+		// usleep(50000);
 		// for(i = 0; i < w; ++i)
 		// {
 		// 	for( j = 0; j < h ; ++j)
