@@ -294,9 +294,9 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	int c;
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
-		for( j = 0; j <h ; ++j)
+		for( j = 0; j<h ; ++j)
 		{				
-			memcpy(*dst+SCREEN_WIDTH*j,image->content+j*w*4,w*4);
+			memcpy(dst+SCREEN_WIDTH*j,image->content+j*w*4,w*4);
 		}
 		// for(i = 0; i < w; ++i)
 		// {
