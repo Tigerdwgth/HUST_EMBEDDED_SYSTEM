@@ -189,17 +189,19 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 		y1=y2;
 		y2=l;
 	}
-
+	int *buf = _begin_draw(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 	if(x1>x2){l=x2;r=x1;}else {l=x1;r=x2;}
 	if(y1>y2){u=y1;d=y2;}else{u=y2;d=y1;}
 	if(x1==x2)
 	{
-		for(;d<u;++d)fb_draw_pixel(x1,d,color);
+		// for(;d<u;++d)fb_draw_pixel(x1,d,color);
+		for(;d<u;++d)*(buf + d*SCREEN_WIDTH + x1) = color;
 	}
 	else if(y1==y2)
 	{
 		//h
 		for(;l<r;++l)fb_draw_pixel(l,y1,color);
+		for(;l<r;++l)*(buf + y1*SCREEN_WIDTH + l) = color;
 	}
 	else
 	{
@@ -214,11 +216,21 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 				int tmp=step;
 				if(step<0)
 				{
-				while(tmp++<=0)fb_draw_pixel(l,yy1--,color);
+					while(tmp++<=0)
+					{
+						*(buf + ((int)yy1)*SCREEN_WIDTH + l) = color;
+						--yy1;
+						// fb_draw_pixel(l,yy1--,color);
+					}
 				}
 				else
 				{
-					while(tmp-->=0)fb_draw_pixel(l,yy1++,color);
+					while(tmp-->=0)
+					{
+						*(buf + ((int)yy1)*SCREEN_WIDTH + l) = color;
+						++yy1;
+						// fb_draw_pixel(l,yy1++,color);
+					}
 				}
 				tmp=step;
 				if(tmp>0)tmp++;
@@ -233,7 +245,8 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 			if (!(x1<x2&&y1<y2))step=-step; 
 			for(;l<r;++l)
 			{
-				fb_draw_pixel(l,(int)yy1,color);
+				*(buf + ((int)yy1)*SCREEN_WIDTH + l) = color;
+				// fb_draw_pixel(l,(int)yy1,color);
 				yy1+=step;
 			}
 		}
@@ -248,19 +261,19 @@ int get_color(int* buf,int x,int y)
 	return *(buf + y*SCREEN_WIDTH + x);
 	//get color from buf
 }
-int cal_alpha(double a1,int c1,int c2)
+int cal_alpha(int alpha,int c1,int c2)
 {
-	return (double)c1*a1+(double)c2*(1-a1);
+	return (c1*alpha+c2*(256-alpha))>>8;
 	//calculate color with alpha
 }
 int calculate_color(int new,int old)
 {
 	int oldr=((old>>16)&0xff),oldg=((old>>8)&0xff),oldb=((old)&0xff);
-	int newalpha=((new>>24)&0xff),newr=((new>>16)&0xff),newg=((new>>8)&0xff),newb=((new)&0xff);
-	double a1=(double)newalpha/255.0;
-	int r=cal_alpha(a1,newr,oldr);
-	int g=cal_alpha(a1,newg,oldg);
-	int b=cal_alpha(a1,newb,oldb);
+	int alpha=((new>>24)&0xff),newr=((new>>16)&0xff),newg=((new>>8)&0xff),newb=((new)&0xff);
+	if (alpha==0)return old;
+	int r=cal_alpha(alpha,newr,oldr);
+	int g=cal_alpha(alpha,newg,oldg);
+	int b=cal_alpha(alpha,newb,oldb);
 	//cal color for rgb seperately
 	return (0xff000000|((0xff&r)<<16)|((0xff&g)<<8)|(0xff&b));
 }
@@ -298,42 +311,44 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 		{				
 			memcpy(dst+SCREEN_WIDTH*j,image->content+j*w*sizeof(int),w*sizeof(int));
 		}
-		// usleep(50000);
-		// for(i = 0; i < w; ++i)
-		// {
-		// 	for( j = 0; j < h ; ++j)
-		// 	{				
-		// 		c=*((int*)(image->content+(w*j+i)*4));
-		// 		*(buf + (y + j)*SCREEN_WIDTH + x+i)=c;
-		// 	}
-		// }
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
-		for(i = 0; i < w; ++i)
+		int *tmpline=(int*)malloc(w*sizeof(int));
+		for( j = 0; j < h ; ++j)
 		{
-			for( j = 0; j < h ; ++j)
+			for(i=0;i<w;i++)
 			{
 				c=*((int*)(image->content+(w*j+i)*4));
-				*(buf + (y + j)*SCREEN_WIDTH + x+i)=calculate_color(c,get_color(buf,x+i,y+j));
+				c=calculate_color(c,get_color(buf,x+i,y+j));
+				tmpline[i]=c;
 			}
+			memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
-
 		return;
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
 	{
-		for(i = 0; i < w; ++i)
+		int *tmpline=(int*)malloc(w*sizeof(int));
+		for( j = 0; j < h ; ++j)
 		{
-			for( j = 0; j < h ; ++j)
+			for(i=0;i<w;i++)
 			{
 				c=*((int*)(image->content+w*j+i));
-				c=(c<<24)|(color&0xffffff);
-				*(buf + (y + j)*SCREEN_WIDTH + x+i)=calculate_color(c,get_color(buf,x+i,y+j));
+				if(c!=0)
+				{
+					c=(c<<24)|(color&0xffffff);
+					c=calculate_color(c,get_color(buf,x+i,y+j));
+				}
+				else
+				{
+					c=get_color(buf,x+i,y+j);
+				}
+				tmpline[i]=c;
 			}
+			memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
-
 		return;
 	}
 /*---------------------------------------------------------------*/
