@@ -335,17 +335,22 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 		{
 			for(i=0;i<w;i++)
 			{
-				c=*((int*)(image->content+w*j+i));
-				if(c!=0)
+				if(*((char*)(image->content+w*j+i)))
 				{
-					c=(c<<24)|(color&0xffffff);
-					c=calculate_color(c,get_color(buf,x+i,y+j));
+					tmpline[i]=color;
 				}
 				else
 				{
-					c=get_color(buf,x+i,y+j);
-				}
-				tmpline[i]=c;
+					tmpline[i]=get_color(buf,x+i,y+j);
+				}	
+				// {
+
+					// c=(c<<24)|(color&0xffffff);
+					// c=calculate_color(c,get_color(buf,x+i,y+j));
+				// }
+				// else
+
+				
 			}
 			memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
