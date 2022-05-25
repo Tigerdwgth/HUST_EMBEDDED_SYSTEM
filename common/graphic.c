@@ -335,8 +335,8 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 		{
 			for(i=0;i<w;i++)
 			{
-				printf("%d ",*((char*)(image->content+w*j+i)));
-				if(*((char*)(image->content+w*j+i)))
+				
+				if(*((char*)(image->content+w*j+i))>100)
 				{
 					tmpline[i]=color;
 				}
