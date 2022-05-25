@@ -35,8 +35,7 @@ static void touch_event_cb(int fd)
 	stepy=j>y?-stepy:stepy;
 	int stepx=i>x?-1:1;
 
-
-	int size=40;
+	int size=30;
 	int color=RED;//different color fo different finger
 	switch (finger)
 	{
@@ -61,7 +60,6 @@ static void touch_event_cb(int fd)
 
 	switch(type){
 	case TOUCH_PRESS:
-
 		printf("TOUCH_PRESS：x=%d,y=%d,finger=%d\n",x,y,finger);
 		fb_draw_text(x,y,"●",size,color);
 		if(x<100&&y<100)exit(0);
