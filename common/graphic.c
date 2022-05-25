@@ -322,7 +322,18 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			for(i=0;i<w;i++)
 			{
 				c=*((int*)(image->content+(w*j+i)*4));
-				tmpline[i]=calculate_color(c,get_color(buf,x+i,y+j));
+				switch (c>>24)
+				{
+				case 0:
+					tmpline[i]=get_color(buf,x+i,y+j);
+					break;
+				case 255:
+					tmpline[i]=c;
+					break;
+				default:
+					tmpline[i]=calculate_color(c,get_color(buf,x+i,y+j));
+					break;
+				}
 			}
 			memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
