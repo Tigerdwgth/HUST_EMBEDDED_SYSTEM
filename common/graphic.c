@@ -322,10 +322,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			for(i=0;i<w;i++)
 			{
 				c=*((int*)(image->content+(w*j+i)*4));
-				if((c>>24)<33)
-					tmpline[i]=get_color(buf,x+i,y+j);
-				else 
-					tmpline[i]=calculate_color(c,get_color(buf,x+i,y+j));
+				tmpline[i]=calculate_color(c,get_color(buf,x+i,y+j));
 			}
 			memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
