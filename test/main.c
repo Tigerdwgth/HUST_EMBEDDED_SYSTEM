@@ -112,6 +112,7 @@ int main(int argc, char *argv[])
 		for(column=-5; column<1029; column+=50){
 			fb_draw_image(column,row,img2,0);
 			fb_update();
+			sleep(0.1);
 		}
 	}
 	end = task_get_time();
