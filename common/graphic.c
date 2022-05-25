@@ -268,9 +268,12 @@ int cal_alpha(int alpha,int c1,int c2)
 }
 int calculate_color(int new,int old)
 {
-	int oldr=((old>>16)&0xff),oldg=((old>>8)&0xff),oldb=((old)&0xff);
-	int alpha=((new>>24)&0xff),newr=((new>>16)&0xff),newg=((new>>8)&0xff),newb=((new)&0xff);
+	int alpha=((new>>24)&0xff);
 	if (alpha==0)return old;
+	int newr=((new>>16)&0xff),newg=((new>>8)&0xff),newb=((new)&0xff);
+	int oldr=((old>>16)&0xff),oldg=((old>>8)&0xff),oldb=((old)&0xff);
+
+
 	int r=cal_alpha(alpha,newr,oldr);
 	int g=cal_alpha(alpha,newg,oldg);
 	int b=cal_alpha(alpha,newb,oldb);
