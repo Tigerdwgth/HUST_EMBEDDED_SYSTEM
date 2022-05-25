@@ -72,8 +72,8 @@ static void touch_event_cb(int fd)
 			fb_draw_rect(0,0,100,100,ORANGE);//button
 			fb_draw_rect(100,0,100,100,PURPLE);//button
 			fb_draw_rect(200,0,100,100,CYAN);//button
-			fb_draw_text(1,10,"EXIT",18,BLACK);
-			fb_draw_text(200,10,"CLEAR",18,BLACK);
+			fb_draw_text(20,35,"EXIT",40,BLACK);
+			fb_draw_text(220,35,"CLEAR",40,BLACK);
 			fb_draw_text(300,40,"多点触控",32,PURPLE);
 		}
 		fingerx[finger]=x;i=x;fingery[finger]=y;j=y;
@@ -127,8 +127,8 @@ int main(int argc, char *argv[])
 	fb_draw_rect(0,0,100,100,ORANGE);
 	fb_draw_rect(200,0,100,100,CYAN);
 	fb_draw_rect(100,0,100,100,PURPLE);//button
-	fb_draw_text(1,10,"EXIT",18,BLACK);
-	fb_draw_text(200,10,"CLEAR",18,BLACK);
+	fb_draw_text(20,35,"EXIT",40,BLACK);
+	fb_draw_text(220,35,"CLEAR",40,BLACK);
 	fb_update();
 	int _;
 	printf("initizing!!!!\n");
