@@ -75,40 +75,40 @@ static void touch_event_cb(int fd)
 int main(int argc, char *argv[])
 {
 
-	// pdm_buf = malloc(pdm_byte_n);
-	// fb_init("/dev/fb0");
-	// font_init("./font.ttc");
-	// fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);
-	// fb_draw_text(100,50,"press to start",50,BLACK);
-	// fb_update();
-	// //打开多点触摸设备文件, 返回文件fd
-	// touch_fd = touch_init("/dev/input/event0");
-	// //添加任务, 当touch_fd文件可读时, 会自动调用touch_event_cb函数
-	// task_add_file(touch_fd, touch_event_cb);
-	// task_loop(); //进入任务循环
+	pdm_buf = malloc(pdm_byte_n);
+	fb_init("/dev/fb0");
+	font_init("./font.ttc");
+	fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);
+	fb_draw_text(100,50,"press to start",50,BLACK);
+	fb_update();
+	//打开多点触摸设备文件, 返回文件fd
+	touch_fd = touch_init("/dev/input/event0");
+	//添加任务, 当touch_fd文件可读时, 会自动调用touch_event_cb函数
+	task_add_file(touch_fd, touch_event_cb);
+	task_loop(); //进入任务循环
 
 
-	int pdm_byte_n = 3*(PDM_SAMPLE_RATE >> 3);
-	uint8_t *pdm_buf = malloc(pdm_byte_n);
-	board_audio_record((uint16_t *)pdm_buf, pdm_byte_n/2);
-	printf("record end\n");
+	// int pdm_byte_n = 3*(PDM_SAMPLE_RATE >> 3);
+	// uint8_t *pdm_buf = malloc(pdm_byte_n);
+	// board_audio_record((uint16_t *)pdm_buf, pdm_byte_n/2);
+	// printf("record end\n");
 
-	pcm_info_st pcm_info;
-	uint8_t *pcm_buf = pdm_to_pcm_s16_mono(pdm_buf, pdm_byte_n, PDM_SAMPLE_RATE, 64, &pcm_info);
-	/* 3072000/64 --> 48KHz 音频数据*/
+	// pcm_info_st pcm_info;
+	// uint8_t *pcm_buf = pdm_to_pcm_s16_mono(pdm_buf, pdm_byte_n, PDM_SAMPLE_RATE, 64, &pcm_info);
+	// /* 3072000/64 --> 48KHz 音频数据*/
 
-	pcm_info_st pcm_info2;
-	uint8_t *pcm_buf2 = pcm_s16_mono_resample(pcm_buf, &pcm_info, PCM_SAMPLE_RATE, &pcm_info2);
-	/*48KHz --> 16KHz 音频数据*/
+	// pcm_info_st pcm_info2;
+	// uint8_t *pcm_buf2 = pcm_s16_mono_resample(pcm_buf, &pcm_info, PCM_SAMPLE_RATE, &pcm_info2);
+	// /*48KHz --> 16KHz 音频数据*/
 
-	pcm_write_wav_file(pcm_buf2, &pcm_info2, "/tmp/test.wav");
-	printf("write wav end\n");
-	pcm_free_buf(pdm_buf);
-	pcm_free_buf(pcm_buf);
-	pcm_free_buf(pcm_buf2);
-	printf("free end\n");
-	char *rev = send_to_vosk_server("/tmp/test.wav");
-	printf("recv from server: %s\n", rev);
+	// pcm_write_wav_file(pcm_buf2, &pcm_info2, "/tmp/test.wav");
+	// printf("write wav end\n");
+	// pcm_free_buf(pdm_buf);
+	// pcm_free_buf(pcm_buf);
+	// pcm_free_buf(pcm_buf2);
+	// printf("free end\n");
+	// char *rev = send_to_vosk_server("/tmp/test.wav");
+	// printf("recv from server: %s\n", rev);
 	return 0;
 }
 
