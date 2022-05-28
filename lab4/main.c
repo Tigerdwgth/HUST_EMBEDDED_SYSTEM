@@ -63,7 +63,9 @@ static void touch_event_cb(int fd)
 		printf("TOUCH_PRESS：x=%d,y=%d,finger=%d\n",x,y,finger);
 		fb_draw_text(x,y,"●",size,color);
 		if(x<100&&y<100)exit(0);
-		if(100<x&&x<200&&y<100)printf("--------------------------------start---------------------------------\n");
+		if(100<x&&x<200&&y<100){
+			fb_draw_rect(100,0,100,100,PURPLE);//button
+		}
 		if(200<x&&x<300&&y<100)
 		{
 			fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);

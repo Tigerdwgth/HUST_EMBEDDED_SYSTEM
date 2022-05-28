@@ -189,7 +189,16 @@ void fb_draw_line(int x1, int y1, int x2, int y2, int color)
 		y1=y2;
 		y2=l;
 	}
+
 	int *buf = _begin_draw(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+	int i=x1,k;
+	double j=y1;
+	//vertical line
+	int intj=y1;
+	int intstepy=j>y2?-1:1;	
+	double stepy=((double)abs(y1-y2)/abs(x1-x2));
+	stepy=j>y2?-stepy:stepy;
+	int stepx=i>2?-1:1;
 	if(x1>x2){l=x2;r=x1;}else {l=x1;r=x2;}
 	if(y1>y2){u=y1;d=y2;}else{u=y2;d=y1;}
 	if(x1==x2)
@@ -344,12 +353,10 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			{
 				char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
 				char*  cur_src=((char*)(image->content+(w*j+i)*4));
-
 				char alpha=cur_src[3];
-
-				switch(alpha) {
+				switch(alpha/50) {
                 case 0: break;
-                case 255:
+                case 5:
 					*(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
                 default:
 					// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
@@ -364,30 +371,43 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
 	{
-		int *tmpline=(int*)malloc(w*sizeof(int));
+		// int *tmpline=(int*)malloc(w*sizeof(int));
 		for( j = 0; j < h ; ++j)
 		{
 			for(i=0;i<w;i++)
 			{
-				
-				if(*((char*)(image->content+w*j+i))>100)
-				{
-					tmpline[i]=color;
+				char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
+				char*  cur_src=(char*)(&color);
+				char alpha=*((char*)(image->content+w*j+i));
+				switch(alpha/50) {
+                case 0: break;
+                case 5:
+					*(dst + j*SCREEN_WIDTH + i)=color;
+                default:
+					// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
+					 cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
+					 cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
+					 cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
+					 cur_dst[3]=0xff;
 				}
-				else
-				{
-					tmpline[i]=get_color(buf,x+i,y+j);
-				}	
+				// if(*((char*)(image->content+w*j+i))>100)
 				// {
+				// 	tmpline[i]=color;
+				// }
+				// else
+				// {
+				// 	tmpline[i]=get_color(buf,x+i,y+j);
+				// }	
+				// // {
 
 					// c=(c<<24)|(color&0xffffff);
 					// c=calculate_color(c,get_color(buf,x+i,y+j));
 				// }
 				// else
-
+					
 				
 			}
-			memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
+			// memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
 		return;
 	}
