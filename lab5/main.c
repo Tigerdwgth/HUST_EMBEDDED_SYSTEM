@@ -103,11 +103,10 @@ int main(int argc, char *argv[])
 
 	pcm_write_wav_file(pcm_buf2, &pcm_info2, "/tmp/test.wav");
 	printf("write wav end\n");
-
 	pcm_free_buf(pdm_buf);
 	pcm_free_buf(pcm_buf);
 	pcm_free_buf(pcm_buf2);
-
+	printf("free end\n");
 	char *rev = send_to_vosk_server("/tmp/test.wav");
 	printf("recv from server: %s\n", rev);
 	return 0;
