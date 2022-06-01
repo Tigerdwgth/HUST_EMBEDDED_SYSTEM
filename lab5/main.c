@@ -25,12 +25,13 @@ static int touch_fd;
 int pdm_byte_n = 3*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
+
 static void touch_event_cb(int fd)
 {
 
 	int type,x,y,finger;
 
-	fb_image *img;
+	
 
 	type = touch_read(fd, &x,&y,&finger);
 	switch(type){
@@ -63,6 +64,7 @@ static void touch_event_cb(int fd)
 		char *rev = send_to_vosk_server("/tmp/test.wav");
 		printf("recv from server: %s\n", rev);
 		//draw the result
+		fb_image *img;
 		if(strlen(rev)>0)
 		{
 			if(strcmp(rev,"开灯")==0)
