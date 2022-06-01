@@ -66,12 +66,12 @@ static void touch_event_cb(int fd)
 		{
 			if(strcmp(rev,"开灯")==0)
 			{
-				img = fb_read_jpeg_image("./turnup.png");
+				img = fb_read_png_image("./turnup.png");
 
 			}
 			else if(strcmp(rev,"关灯")==0)
 			{
-				img = fb_read_jpeg_image("./turndown.png");
+				img = fb_read_png_image("./turndown.png");
 			}
 			fb_draw_image(0,0,img,0);
 			fb_free_image(img);
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 	fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);
 
 	fb_image *img;
-	img = fb_read_jpeg_image("./turndown.png");
+	img = fb_read_png_image("./turndown.png");
 	fb_draw_image(0,0,img,0);
 	fb_free_image(img);
 	fb_draw_text(100,50,"press to start",50,BLACK);
