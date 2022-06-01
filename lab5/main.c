@@ -39,7 +39,7 @@ static void touch_event_cb(int fd)
 		printf("TOUCH_PRESS：x=%d,y=%d,finger=%d\n",x,y,finger);
 		//press to start recording
 		pdm_buf = malloc(pdm_byte_n);
-		fb_draw_rect(300,200,50,30,BLACK);
+		fb_draw_rect(400,0,800,800,WHITE);
 		board_audio_record((uint16_t *)pdm_buf, pdm_byte_n/2);
 		printf("record end\n");
 		break;
@@ -78,7 +78,7 @@ static void touch_event_cb(int fd)
 			}
 			fb_draw_image(0,0,img,0);
 			fb_free_image(img);
-			fb_draw_text(300,200,rev,50,BLACK);
+			fb_draw_text(400,200,rev,50,BLACK);
 		}
 		printf("finish recognition\n");
 		break;
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 	img = fb_read_png_image("./turndown.png");
 	fb_draw_image(0,0,img,0);
 	fb_free_image(img);
-	fb_draw_text(300,50,"press to start",50,BLACK);
+	fb_draw_text(400,50,"press to start",50,BLACK);
 	fb_update();
 	//打开多点触摸设备文件, 返回文件fd
 	touch_fd = touch_init("/dev/input/event0");
