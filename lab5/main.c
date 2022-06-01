@@ -37,7 +37,8 @@ static void touch_event_cb(int fd)
 	case TOUCH_PRESS:
 		printf("TOUCH_PRESS：x=%d,y=%d,finger=%d\n",x,y,finger);
 		//press to start recording
-		
+		free(pdm_buf);
+		pdm_buf = malloc(pdm_byte_n);
 		board_audio_record((uint16_t *)pdm_buf, pdm_byte_n/2);
 		printf("record end\n");
 		break;
@@ -92,7 +93,7 @@ static void touch_event_cb(int fd)
 int main(int argc, char *argv[])
 {
 
-	pdm_buf = malloc(pdm_byte_n);
+	
 	fb_init("/dev/fb0");
 	font_init("./font.ttc");
 	fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);
