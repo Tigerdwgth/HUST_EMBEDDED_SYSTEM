@@ -77,7 +77,7 @@ static void touch_event_cb(int fd)
 			}
 			fb_draw_image(0,0,img,0);
 			fb_free_image(img);
-			fb_draw_text(100,50,rev,50,BLACK);
+			fb_draw_text(300,200,rev,50,BLACK);
 		}
 		printf("finish recognition\n");
 		break;
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 	img = fb_read_png_image("./turndown.png");
 	fb_draw_image(0,0,img,0);
 	fb_free_image(img);
-	fb_draw_text(100,50,"press to start",50,BLACK);
+	fb_draw_text(300,50,"press to start",50,BLACK);
 	fb_update();
 	//打开多点触摸设备文件, 返回文件fd
 	touch_fd = touch_init("/dev/input/event0");
