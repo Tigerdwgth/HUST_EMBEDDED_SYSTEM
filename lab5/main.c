@@ -80,6 +80,7 @@ static void touch_event_cb(int fd)
 			fb_free_image(img);
 			fb_draw_text(100,50,rev,50,BLACK);
 		}
+		printf("finish recognition\n");
 		break;
 	case TOUCH_ERROR:
 		printf("close touch fd\n");
