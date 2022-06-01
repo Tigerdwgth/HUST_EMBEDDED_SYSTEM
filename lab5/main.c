@@ -22,7 +22,7 @@
 #define WHITE   FB_COLOR(255,255,255)
 #define BLACK   FB_COLOR(0,0,0)
 static int touch_fd;
-int pdm_byte_n = 3*(PDM_SAMPLE_RATE >> 3);
+int pdm_byte_n = 1.5*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
 
