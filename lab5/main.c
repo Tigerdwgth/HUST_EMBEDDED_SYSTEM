@@ -3,7 +3,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-
+#include <string.h>
 #include "audio_util.h"
 
 /*PYNQ-Z1的pdm采样频率*/
@@ -29,6 +29,9 @@ static void touch_event_cb(int fd)
 {
 
 	int type,x,y,finger;
+
+	fb_image *img;
+
 	type = touch_read(fd, &x,&y,&finger);
 	switch(type){
 	case TOUCH_PRESS:
@@ -59,7 +62,21 @@ static void touch_event_cb(int fd)
 		char *rev = send_to_vosk_server("/tmp/test.wav");
 		printf("recv from server: %s\n", rev);
 		//draw the result
-		fb_draw_text(10,5,rev,50,BLACK);
+		if(strlen(rev)>0)
+		{
+			if(strcmp(rev,"开灯")==0)
+			{
+				img = fb_read_jpeg_image("./turnup.png");
+
+			}
+			else if(strcmp(rev,"关灯")==0)
+			{
+				img = fb_read_jpeg_image("./turndown.png");
+			}
+			fb_draw_image(0,0,img,0);
+			fb_free_image(img);
+			fb_draw_text(100,50,rev,50,BLACK);
+		}
 		break;
 	case TOUCH_ERROR:
 		printf("close touch fd\n");
@@ -79,6 +96,11 @@ int main(int argc, char *argv[])
 	fb_init("/dev/fb0");
 	font_init("./font.ttc");
 	fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);
+
+	fb_image *img;
+	img = fb_read_jpeg_image("./turndown.png");
+	fb_draw_image(0,0,img,0);
+	fb_free_image(img);
 	fb_draw_text(100,50,"press to start",50,BLACK);
 	fb_update();
 	//打开多点触摸设备文件, 返回文件fd
