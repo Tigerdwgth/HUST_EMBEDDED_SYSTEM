@@ -25,7 +25,10 @@ static int touch_fd;
 int pdm_byte_n = 1.5*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
-
+static char * answer(char * msg)
+{
+	return msg;
+}
 static void touch_event_cb(int fd)
 {
 
@@ -39,7 +42,18 @@ static void touch_event_cb(int fd)
 		printf("TOUCH_PRESS：x=%d,y=%d,finger=%d\n",x,y,finger);
 		//press to start recording
 		pdm_buf = malloc(pdm_byte_n);
-		fb_draw_rect(400,0,800,800,WHITE);
+		fb_draw_rect(450,0,800,800,WHITE);
+		fb_image *img_dsm, *img_bubble;
+		img_dsm = fb_read_png_image("./dsm.png");
+		img_bubble = fb_read_png_image("./bubble.png");
+		fb_draw_image(450, 388, img_dsm, 0);
+		fb_draw_image(450, 188, img_bubble, 0);
+		fb_draw_text(470,300,"......",30,BLACK);
+		fb_free_image(img_dsm);
+		fb_free_image(img_bubble);
+		fb_draw_rect(0,0,100,100,ORANGE);
+		fb_draw_text(14,66,"EXIT",36,BLACK);
+		if(x<100&&y<100)exit(0);
 		board_audio_record((uint16_t *)pdm_buf, pdm_byte_n/2);
 		printf("record end\n");
 		break;
@@ -65,21 +79,46 @@ static void touch_event_cb(int fd)
 		printf("recv from server: %s\n", rev);
 		//draw the result
 		fb_image *img;
-		if(strlen(rev)>0)
-		{
-			if(strcmp(rev,"开灯")==0)
-			{
-				img = fb_read_png_image("./turnup.png");
+		const char s[2] = " ";
+		char *token;
+		
+		/* 获取第一个子字符串 */
+		token = strtok(rev,s);
+		
+		/* 继续获取其他的子字符串 */
+		while( token != NULL ) {
 
+			fb_image *img_dsm, *img_bubble;
+			fb_draw_rect(450,0,800,800,WHITE);
+			img_dsm = fb_read_png_image("./dsm.png");
+			img_bubble = fb_read_png_image("./bubble.png");
+			fb_draw_image(450, 388, img_dsm, 0);
+			fb_draw_image(450, 188, img_bubble, 0);
+			fb_free_image(img_dsm);
+			fb_free_image(img_bubble);
+			printf( "%s\n", token );
+			if(strlen(token)>0)
+			{	
+				if(strcmp(token,"开灯")==0)
+				{
+					img = fb_read_png_image("./turnup.png");
+
+				}
+				else if(strcmp(token,"关灯")==0)
+				{
+					img = fb_read_png_image("./turndown.png");
+				}
+				fb_draw_image(0,0,img,0);
+				fb_free_image(img);
+				fb_draw_text(470,300,answer(token),30,BLACK);
 			}
-			else if(strcmp(rev,"关灯")==0)
-			{
-				img = fb_read_png_image("./turndown.png");
-			}
-			fb_draw_image(0,0,img,0);
-			fb_free_image(img);
-			fb_draw_text(400,200,rev,50,BLACK);
+			
+			sleep(1);
+			token = strtok(NULL, s);
+			fb_update();
+
 		}
+		
 		printf("finish recognition\n");
 		break;
 	case TOUCH_ERROR:
@@ -102,10 +141,16 @@ int main(int argc, char *argv[])
 	fb_draw_rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,COLOR_BACKGROUND);
 
 	fb_image *img;
+	fb_image *img_dsm;
 	img = fb_read_png_image("./turndown.png");
+	img_dsm = fb_read_png_image("./dsm.png");
+	fb_draw_image(450,388,img_dsm,0);
 	fb_draw_image(0,0,img,0);
 	fb_free_image(img);
-	fb_draw_text(400,50,"press to start",50,BLACK);
+	fb_free_image(img_dsm);
+	fb_draw_text(500,50,"点击开始",30,BLACK);
+	fb_draw_rect(0,0,100,100,ORANGE);
+	fb_draw_text(14,66,"EXIT",36,BLACK);
 	fb_update();
 	//打开多点触摸设备文件, 返回文件fd
 	touch_fd = touch_init("/dev/input/event0");
