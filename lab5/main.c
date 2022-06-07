@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 	img = fb_read_png_image("./turndown.png");
 	img_dsm = fb_read_png_image("./dsm.png");
 	fb_draw_image(450,388,img_dsm,0);
-	fb_draw_image(0,0,img,0);
+	fb_draw_image(-50,0,img,0);
 	fb_free_image(img);
 	fb_free_image(img_dsm);
 	fb_draw_text(500,50,"点击开始",30,BLACK);

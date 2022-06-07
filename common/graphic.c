@@ -357,7 +357,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 				switch(alpha/50) {
                 case 0: break;
                 case 5:
-					*(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
+					*(dst + j*SCREEN_WIDTH + i)=*((int*)(cur_src));
                 default:
 					// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
 					 cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
