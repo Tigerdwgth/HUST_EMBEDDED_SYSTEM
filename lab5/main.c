@@ -22,11 +22,23 @@
 #define WHITE   FB_COLOR(255,255,255)
 #define BLACK   FB_COLOR(0,0,0)
 static int touch_fd;
-int pdm_byte_n = 1.5*(PDM_SAMPLE_RATE >> 3);
+int pdm_byte_n = 2*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
 static char * answer(char * msg)
 {
+	if(strcmp(msg,"外币外币")==0)
+		return "外币巴伯";
+	if(strcmp(msg,"你爱吃什么")==0)
+		return "肉蛋冲击";
+	if(strcmp(msg,"说句英语")==0)
+		return " are you good Malaysia "   ;
+	if(strcmp(msg,"外币外币")==0)
+		return "外币巴伯";
+	if(strcmp(msg,"笑一个")==0)
+		return "嘿嘿嘿嘿";
+	if(strcmp(msg,"你是谁")==0)
+		return "我是芜湖大司马,韩金龙";								
 	return msg;
 }
 static void touch_event_cb(int fd)
