@@ -108,7 +108,7 @@ static void touch_event_cb(int fd)
 				{
 					img = fb_read_png_image("./turndown.png");
 				}
-				fb_draw_image(0,0,img,0);
+				fb_draw_image(-50,0,img,0);
 				fb_free_image(img);
 				fb_draw_text(470,300,answer(token),30,BLACK);
 			}
