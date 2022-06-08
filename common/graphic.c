@@ -333,7 +333,9 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 					cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
 					cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
 				}
+				if((ix+i)>=SCREEN_WIDTH)break;
          	}
+			if((j+iy)>=SCREEN_HEIGHT)break;
 		}
 		return;
 	}
