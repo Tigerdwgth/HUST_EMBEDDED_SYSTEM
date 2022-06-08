@@ -27,17 +27,9 @@ uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
 static char * answer(char * msg)
 {
-	if(strcmp(msg,"外币外币")==0)
-		return "外币巴伯";
-	if(strcmp(msg,"你爱吃什么")==0)
-		return "肉蛋冲击";
-	if(strcmp(msg,"说句英语")==0)
-		return " are you good Malaysia "   ;
-	if(strcmp(msg,"外币外币")==0)
-		return "外币巴伯";
-	if(strcmp(msg,"笑一个")==0)
+	if(strcmp(msg,"笑")==0)
 		return "嘿嘿嘿嘿";
-	if(strcmp(msg,"你是谁")==0)
+	if(strcmp(msg,"你好")==0)
 		return "我是芜湖大司马,韩金龙";								
 	return msg;
 }
