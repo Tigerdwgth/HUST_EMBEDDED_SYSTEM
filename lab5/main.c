@@ -25,12 +25,13 @@ static int touch_fd;
 int pdm_byte_n = 2*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
+static char* strs[2]={"嘿嘿嘿嘿","我是芜湖大司马,\n韩金龙"};
 static char * answer(char * msg)
 {
 	if(strcmp(msg,"笑")==0)
-		return "嘿嘿嘿嘿";
+		return strs[0];
 	if(strcmp(msg,"你好")==0)
-		return "我是芜湖大司马,韩金龙";								
+		return strs[1];								
 	return msg;
 }
 static void touch_event_cb(int fd)
@@ -52,7 +53,7 @@ static void touch_event_cb(int fd)
 		img_bubble = fb_read_png_image("./bubble.png");
 		fb_draw_image(450, 388, img_dsm, 0);
 		fb_draw_image(450, 188, img_bubble, 0);
-		fb_draw_text(470,300,"......",30,BLACK);
+		fb_draw_text(470,280,"......",30,BLACK);
 		fb_free_image(img_dsm);
 		fb_free_image(img_bubble);
 		fb_draw_rect(0,0,100,100,ORANGE);
@@ -114,7 +115,7 @@ static void touch_event_cb(int fd)
 				}
 				fb_draw_image(-50,0,img,0);
 				fb_free_image(img);
-				fb_draw_text(470,300,answer(token),30,BLACK);
+				fb_draw_text(470,280,answer(token),30,BLACK);
 			}
 			
 			sleep(1);
