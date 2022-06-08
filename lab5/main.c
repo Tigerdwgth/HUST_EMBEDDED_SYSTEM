@@ -25,8 +25,8 @@ static int touch_fd;
 int pdm_byte_n = 2*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
-static char* strs[2]={"嘿嘿嘿嘿","我是芜湖大司马,\n韩金龙"};
-static char * answer(char * msg)
+const char* strs[2]={"嘿嘿嘿嘿","我是芜湖大司马,\n韩金龙"};
+const char * answer(char * msg)
 {
 	if(strcmp(msg,"笑")==0)
 		return strs[0];
