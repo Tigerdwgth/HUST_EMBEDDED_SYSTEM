@@ -313,54 +313,26 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
-		int blockSize=4;
-		int ii,jj;
-		for (i = 0; i < w; i += blockSize)
-        {
-			for ( j = 0; j < h; j += blockSize)
-            {
-				for (ii = i; ii<w&&ii < i + blockSize; ii++)
-                {
-					for (jj = j; jj<h&&jj < j + blockSize; jj++)
-					{
-						char* cur_dst=((char*)(dst+SCREEN_WIDTH*jj+ii));
-						char*  cur_src=((char*)(image->content+(((iy)*(ix+w)+ix) +(w+ix)*jj+ii)*4));
-						char alpha=cur_src[3];
-						switch(alpha/50) 
-						{
-						case 0: break;
-						case 5:
-							*(dst + jj*SCREEN_WIDTH + ii)=*((int*)(cur_src));
-						default:
-							// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
-							cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
-							cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
-							cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
-						}
+		for(i=0;i<w;i++)
+		{
+			for( j = 0; j < h ; ++j)
+			{
+				char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
+				char*  cur_src=((char*)(image->content+(((iy)*(ix+w)+ix) +(w+ix)*j+i)*4));
+				char alpha=cur_src[3];
+				switch(alpha/50) 
+				{
+				case 0: break;
+				case 5:
+					*(dst + j*SCREEN_WIDTH + i)=*((int*)(cur_src));
+				default:
+					// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
+					cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
+					cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
+					cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
 					}
-				}
-            }
-        }
-		// for( j = 0; j < h ; ++j)
-		// {
-		// 	for(i=0;i<w;i++)
-		// 	{
-		// 		char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
-		// 		char*  cur_src=((char*)(image->content+(((iy)*(ix+w)+ix) +(w+ix)*j+i)*4));
-		// 		char alpha=cur_src[3];
-		// 		switch(alpha/50) 
-		// 		{
-		// 		case 0: break;
-		// 		case 5:
-		// 			*(dst + j*SCREEN_WIDTH + i)=*((int*)(cur_src));
-		// 		default:
-		// 			// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
-		// 			cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
-		// 			cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
-		// 			cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
-		// 			}
-        //  	}
-		// }
+         	}
+		}
 
 		return;
 	}
