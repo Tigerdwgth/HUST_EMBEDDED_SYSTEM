@@ -25,7 +25,7 @@ static int touch_fd;
 int pdm_byte_n = 2*(PDM_SAMPLE_RATE >> 3);
 uint8_t *pdm_buf;
 static char * send_to_vosk_server(char *file);
-const char* strs[2]={"嘿嘿嘿嘿","我是芜湖大司马,\n韩金龙"};
+const char* strs[2]={"嘿嘿嘿嘿","我是韩金龙"};
 const char * answer(char * msg)
 {
 	if(strcmp(msg,"笑")==0)
@@ -115,7 +115,7 @@ static void touch_event_cb(int fd)
 				}
 				fb_draw_image(-50,0,img,0);
 				fb_free_image(img);
-				fb_draw_text(470,280,answer(token),30,BLACK);
+				fb_draw_text(470,280,answer(token),20,BLACK);
 			}
 			
 			sleep(1);
