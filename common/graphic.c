@@ -276,18 +276,7 @@ int cal_alpha(int alpha,int c1,int c2)
 	return (((c1-c2)*alpha)>>8)+c2;
 	//calculate color with alpha
 }
-int calculate_color(int new,int old)
-{
-	int alpha=((new>>24)&0xff);
-	if (alpha==0)return old;
-	int newr=((new>>16)&0xff),newg=((new>>8)&0xff),newb=((new)&0xff);
-	int oldr=((old>>16)&0xff),oldg=((old>>8)&0xff),oldb=((old)&0xff);
-	int r=cal_alpha(alpha,newr,oldr);
-	int g=cal_alpha(alpha,newg,oldg);
-	int b=cal_alpha(alpha,newb,oldb);
-	//cal color for rgb seperately
-	return (0xff000000|(r<<16)|((g<<8)|(b)));
-}
+
 void fb_draw_image(int x, int y, fb_image *image, int color)
 {
 	if(image == NULL) return;
@@ -324,54 +313,59 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
-		// int *tmpline=(int*)malloc(w*sizeof(int));
+		int blockSize=4;
+		int ii,jj;
+		for (i = 0; i < w; i += blockSize)
+        {
+			for ( j = 0; j < h; j += blockSize)
+            {
+				for (ii = i; ii<w&&ii < i + blockSize; ii++)
+                {
+					for (jj = j; jj<h&&jj < j + blockSize; jj++)
+					{
+						char* cur_dst=((char*)(dst+SCREEN_WIDTH*jj+ii));
+						char*  cur_src=((char*)(image->content+(((iy)*(ix+w)+ix) +(w+ix)*jj+ii)*4));
+						char alpha=cur_src[3];
+						switch(alpha/50) 
+						{
+						case 0: break;
+						case 5:
+							*(dst + jj*SCREEN_WIDTH + ii)=*((int*)(cur_src));
+						default:
+							// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
+							cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
+							cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
+							cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
+						}
+					}
+				}
+            }
+        }
 		// for( j = 0; j < h ; ++j)
 		// {
 		// 	for(i=0;i<w;i++)
 		// 	{
-		// 		int r,g,b
-		// 		c=*((int*)(image->content+(w*j+i)*4));
-
-		// 		switch (c>>24)
+		// 		char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
+		// 		char*  cur_src=((char*)(image->content+(((iy)*(ix+w)+ix) +(w+ix)*j+i)*4));
+		// 		char alpha=cur_src[3];
+		// 		switch(alpha/50) 
 		// 		{
-		// 		case 0:
-		// 			tmpline[i]=get_color(buf,x+i,y+j);
-		// 			break;
-		// 		case 255:
-		// 			tmpline[i]=c;
-		// 			break;
+		// 		case 0: break;
+		// 		case 5:
+		// 			*(dst + j*SCREEN_WIDTH + i)=*((int*)(cur_src));
 		// 		default:
-		// 			tmpline[i]=calculate_color(c,get_color(buf,x+i,y+j));
-		// 			break;
-		// 		}
-		// 	}
-		// 	memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
+		// 			// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
+		// 			cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
+		// 			cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
+		// 			cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
+		// 			}
+        //  	}
 		// }
-		for( j = 0; j < h ; ++j)
-		{
-			for(i=0;i<w;i++)
-			{
-				char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
-				char*  cur_src=((char*)(image->content+( ((iy)*(ix+w)+ix) +(w+ix)*j+i)*4));
-				char alpha=cur_src[3];
-				switch(alpha/50) {
-                case 0: break;
-                case 5:
-					*(dst + j*SCREEN_WIDTH + i)=*((int*)(cur_src));
-                default:
-					// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
-					 cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
-					 cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
-					 cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
-				}
-         	}
-		}
 
 		return;
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
 	{
-		// int *tmpline=(int*)malloc(w*sizeof(int));
 		for( j = 0; j < h ; ++j)
 		{
 			for(i=0;i<w;i++)
@@ -389,25 +383,9 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 					 cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
 					 cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
 					 cur_dst[3]=0xff;
-				}
-				// if(*((char*)(image->content+w*j+i))>100)
-				// {
-				// 	tmpline[i]=color;
-				// }
-				// else
-				// {
-				// 	tmpline[i]=get_color(buf,x+i,y+j);
-				// }	
-				// // {
 
-					// c=(c<<24)|(color&0xffffff);
-					// c=calculate_color(c,get_color(buf,x+i,y+j));
-				// }
-				// else
-					
-				
+				}	
 			}
-			// memcpy(dst+SCREEN_WIDTH*j,tmpline,w*sizeof(int));
 		}
 		return;
 	}
