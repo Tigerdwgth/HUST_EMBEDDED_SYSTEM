@@ -2,8 +2,8 @@
 CC:=/PYNQ/gcc-armv7hf/bin/arm-linux-gnueabihf-gcc
 STRIP:=/PYNQ/gcc-armv7hf/bin/arm-linux-gnueabihf-strip
 
-CFLAGS:=-Wall
-LDFLAGS:=-Wall
+CFLAGS:=-Wall -O3
+LDFLAGS:=-Wall -O3
 
 INCLUDE := -I../common/external/include
 LIB := -L../common/external/lib -lturbojpeg -lfreetype -lpng12 -lz -lm -lsds_lib
