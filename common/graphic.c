@@ -309,7 +309,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	if(image->color_type == FB_COLOR_RGB_8880) /*lab3: jpg*/
 	{
 		for( j = 0; j<h ; ++j)				
-			memcpy(dst+SCREEN_WIDTH*j,image->content+((iy)*(ix+w)+ix+j*(w+ix))*sizeof(int),w*sizeof(int));
+			memcpy(dst+SCREEN_WIDTH*j,image->content+((iy)*(w0)+ix+j*(w0))*sizeof(int),w*sizeof(int));
 		return;
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
@@ -346,7 +346,7 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 			{
 				char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
 				char*  cur_src=(char*)(&color);
-				char alpha=*((char*)(image->content+(w*(iy+j)+i+ix)));
+				char alpha=*((char*)(image->content+(((iy)*(w0)+ix) +(w0)*j+i)));
 				switch(alpha/50) {
                 case 0: break;
                 case 5:
