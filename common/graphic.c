@@ -335,7 +335,6 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 				}
          	}
 		}
-
 		return;
 	}
 	else if(image->color_type == FB_COLOR_ALPHA_8) /*lab3: font*/
@@ -391,7 +390,6 @@ void fb_draw_text(int x, int y, char *text, int font_size, int color)
 		if(img == NULL) break;
 		fb_draw_image(x+info.left, y-info.top, img, color);
 		fb_free_image(img);
-
 		x += info.advance_x;
 		i += info.bytes;
 	}
