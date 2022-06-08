@@ -285,7 +285,8 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	int iy = 0; //image y
 	int w = image->pixel_w; //draw width
 	int h = image->pixel_h; //draw height
-
+	int w0=w;
+	int h0=h;
 	if(x<0) {w+=x; ix-=x; x=0;}
 	if(y<0) {h+=y; iy-=y; y=0;}
 	
@@ -313,12 +314,12 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 	}
 	else if(image->color_type == FB_COLOR_RGBA_8888) /*lab3: png*/
 	{
-		for(i=0;i<w;i++)
+		for( j = 0; j < h ; ++j)
 		{
-			for( j = 0; j < h ; ++j)
+			for(i=0;i<w;i++)
 			{
 				char* cur_dst=((char*)(dst+SCREEN_WIDTH*j+i));
-				char*  cur_src=((char*)(image->content+(((iy)*(ix+w)+ix) +(w+ix)*j+i)*4));
+				char* cur_src=((char*)(image->content+(((iy)*(w0)+ix) +(w0)*j+i)*4));
 				char alpha=cur_src[3];
 				switch(alpha/50) 
 				{
@@ -327,10 +328,11 @@ void fb_draw_image(int x, int y, fb_image *image, int color)
 					*(dst + j*SCREEN_WIDTH + i)=*((int*)(cur_src));
 				default:
 					// *(dst + j*SCREEN_WIDTH + i)=*((int*)(image->content+(w*j+i)*4));
+					
 					cur_dst[0]+=(((cur_src[0] - cur_dst[0]) * alpha) >> 8);
 					cur_dst[1]+=(((cur_src[1] - cur_dst[1]) * alpha) >> 8);
 					cur_dst[2]+=(((cur_src[2] - cur_dst[2]) * alpha) >> 8);
-					}
+				}
          	}
 		}
 
